@@ -1,0 +1,138 @@
+
+#include <stdio.h>
+#include <stdbool.h>
+
+typedef struct {
+    int account_number;
+    float balance;
+    int pin;
+} Account;
+
+void createAccount(Account accounts[], int *numAccounts);
+bool authenticateUser(Account accounts[], int numAccounts, int accountNumber, int pin);
+void deposit(Account accounts[], int numAccounts, int accountNumber, float amount);
+void withdraw(Account accounts[], int numAccounts, int accountNumber, float amount);
+void checkBalance(Account accounts[], int numAccounts, int accountNumber);
+
+int main() {
+    Account accounts[10];  
+    int numAccounts = 0;
+
+    int choice;
+    int accountNumber, pin;
+    float amount;
+ printf("                                    Bank Info App\n");
+    do {
+        printf(" \n1. Create Account\n2. Deposit\n3. Withdraw\n4. Check Balance\n5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+            case 1:
+                createAccount(accounts, &numAccounts);
+                break;
+            case 2:
+                printf("Enter account number: ");
+                scanf("%d", &accountNumber);
+                printf("Enter PIN: ");
+                scanf("%d", &pin);
+                if (authenticateUser(accounts, numAccounts, accountNumber, pin)) {
+                    printf("Enter amount to deposit: ");
+                    scanf("%f", &amount);
+                    deposit(accounts, numAccounts, accountNumber, amount);
+                } else {
+                    printf("Invalid account number or PIN.\n");
+                }
+                break;
+            case 3:
+                printf("Enter account number: ");
+                scanf("%d", &accountNumber);
+                printf("Enter PIN: ");
+                scanf("%d", &pin);
+                if (authenticateUser(accounts, numAccounts, accountNumber, pin)) {
+                    printf("Enter amount to withdraw: ");
+                    scanf("%f", &amount);
+                    withdraw(accounts, numAccounts, accountNumber, amount);
+                } else {
+                    printf("Invalid account number or PIN.\n");
+                }
+                break;
+            case 4:
+                printf("Enter account number: ");
+                scanf("%d", &accountNumber);
+                printf("Enter PIN: ");
+                scanf("%d", &pin);
+                if (authenticateUser(accounts, numAccounts, accountNumber, pin)) {
+                    checkBalance(accounts, numAccounts, accountNumber);
+                } else {
+                    printf("Invalid account number or PIN.\n");
+                }
+                break;
+            case 5:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice.\n");
+        }
+    } while(choice != 5);
+
+    return 0;
+}
+
+void createAccount(Account accounts[], int *numAccounts) {
+    if (*numAccounts >= 10) {
+        printf("Cannot create more accounts. Maximum limit reached.\n");
+        return;
+    }
+
+    printf("Enter account number: ");
+    scanf("%d", &accounts[*numAccounts].account_number);
+    printf("Set PIN: ");
+    scanf("%d", &accounts[*numAccounts].pin);
+    accounts[*numAccounts].balance = 0;
+
+    printf("Account created successfully.\n");
+    (*numAccounts)++;
+}
+
+bool authenticateUser(Account accounts[], int numAccounts, int accountNumber, int pin) {
+    for (int i = 0; i < numAccounts; i++) {
+        if (accounts[i].account_number == accountNumber && accounts[i].pin == pin) {
+            return true;
+        }
+    }
+    return false;
+}
+void deposit(Account accounts[], int numAccounts, int accountNumber, float amount) {
+    for (int i = 0; i < numAccounts; i++) {
+        if (accounts[i].account_number == accountNumber) {
+            accounts[i].balance += amount;
+            printf("Deposit successful. New balance: %.2f\n", accounts[i].balance);
+            return;
+        }
+    }
+    printf("Account not found.\n");
+}
+void withdraw(Account accounts[], int numAccounts, int accountNumber, float amount) {
+    for (int i = 0; i < numAccounts; i++) {
+        if (accounts[i].account_number == accountNumber) {
+            if (accounts[i].balance >= amount) {
+                accounts[i].balance -= amount;
+                printf("Withdrawal successful. New balance: %.2f\n", accounts[i].balance);
+            } else {
+                printf("Insufficient balance.\n");
+            }
+            return;
+        }
+    }
+    printf("Account not found.\n");
+}
+void checkBalance(Account accounts[], int numAccounts, int accountNumber) {
+    for (int i = 0; i < numAccounts; i++) {
+        if (accounts[i].account_number == accountNumber) {
+            printf("Account Balance: %.2f\n", accounts[i].balance);
+            return;
+        }
+    }
+    printf("Account not found.\n");
+}
