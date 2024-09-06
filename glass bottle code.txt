@@ -1,0 +1,30 @@
+import java.util.*;
+class Main{
+    public static void main(String[]args){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int r1 = sc.nextInt();
+        int r2 = sc.nextInt();
+        int r3 = sc.nextInt();
+        int count=0;
+        while(n>0)
+        {
+             if(n>=r2){
+            count++;
+            n-=r2;
+            n+=r3;
+             
+        }
+        else if(n>=r1 ){
+            count++;
+            n-=r1;
+        }
+        else{
+          
+            break;
+        }
+        }
+        System.out.println(count);
+        
+    }
+}
